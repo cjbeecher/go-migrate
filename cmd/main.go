@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"flag"
 	"gomigrate"
 	"log"
 )
@@ -20,9 +21,16 @@ func updateHistory(conn *sql.DB, entries map[string]gomigrate.HashEntry, file go
 }
 
 func main() {
+	fNamePtr := flag.String("config-file", "", "Specify a non-default config file")
 	configs := gomigrate.Migration{}
-	if err := configs.Init(); err != nil {
-		log.Fatal(err)
+	if *fNamePtr != "" {
+		if err := configs.Init(*fNamePtr); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if err := configs.Init(); err != nil {
+			log.Fatal(err)
+		}
 	}
 	for _, config := range configs.DBParams {
 		migrationFiles, err := gomigrate.ReadMigrationFiles(config.Queries)
