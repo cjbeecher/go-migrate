@@ -22,6 +22,7 @@ func updateHistory(conn *sql.DB, entries map[string]gomigrate.HashEntry, file go
 
 func main() {
 	fNamePtr := flag.String("config-file", "", "Specify a non-default config file")
+	flag.Parse()
 	configs := gomigrate.Migration{}
 	if *fNamePtr != "" {
 		if err := configs.Init(*fNamePtr); err != nil {
